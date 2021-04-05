@@ -4,3 +4,5 @@ gem "rspec"
 gem "pry"
 gem "pry-byebug"
 gem 'simplecov', require: false, group: :test
+gem 'rspec-rails'
+gem 'spring'
