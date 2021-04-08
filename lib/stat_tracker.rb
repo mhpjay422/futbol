@@ -44,27 +44,28 @@ class StatTracker
     end
   end
   
-  def percentage_home_wins
+  def percentage_home_wins(games)
+    home_wins = games.reduce(0) {|total, game| total += 1 if game.home_goals > game.away_goals; total }
+    home_wins / games.length.to_f * 100
+  end
+  
+  def percentage_visitor_wins(games)
+    
+  end
+  
+  def percentage_ties(games)
   
   end
   
-  def percentage_visitor_wins
+  def count_of_games_by_season(games)
   
   end
   
-  def percentage_ties
+  def average_goals_per_game(games)
   
   end
   
-  def count_of_games_by_season
-  
-  end
-  
-  def average_goals_per_game
-  
-  end
-  
-  def average_goals_by_season
+  def average_goals_by_season(games)
   
   end
 end
