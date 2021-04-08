@@ -54,8 +54,8 @@ class StatTracker
     visitor_wins / games.length.to_f * 100
   end
   
-  def percentage_ties(games)
-  
+  def percentage_ties(home_percentage, away_percentage)
+    100 - (home_percentage + away_percentage).to_f
   end
   
   def count_of_games_by_season(games)
