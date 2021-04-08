@@ -60,13 +60,7 @@ class StatTracker
   
   def count_of_games_by_season(games)
     hash = {}
-    games.each do |game|
-      if hash[game.season]
-        hash[game.season] += 1
-      else 
-        hash[game.season] = 1
-      end
-    end
+    games.each {|game| hash[game.season] ? hash[game.season] += 1 : hash[game.season] = 1}
     hash
   end
   
@@ -89,8 +83,9 @@ class StatTracker
         hash[season] = [1, (home_goals + away_goals)]
       end
     end
-    hash = hash.each {|game| 
-    # binding.pry;
-     hash[game[0]] = game[1][1] / game[1][0].to_f.round(2)}
+
+    hash = hash.each {|game| hash[game[0]] = game[1][1] / game[1][0].to_f.round(2)}
   end
+
+  
 end
