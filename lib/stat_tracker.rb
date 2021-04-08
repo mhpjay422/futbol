@@ -19,7 +19,7 @@ class StatTracker
   end
 
   def team_collection 
-
+    Team.load_teams(@teams)
   end
 
   def single_team_stats_specific_game_collection 
@@ -87,5 +87,5 @@ class StatTracker
     hash = hash.each {|game| hash[game[0]] = game[1][1] / game[1][0].to_f.round(2)}
   end
 
-  
+
 end
