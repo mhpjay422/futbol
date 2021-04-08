@@ -17,4 +17,5 @@ all_games = stat_tracker.game_collection
 highest_combined_score = stat_tracker.highest_total_score(all_games)
 lowest_combined_score = stat_tracker.lowest_total_score(all_games)
 percent_home_victory = stat_tracker.percentage_home_wins(all_games)
-puts percent_home_victory 
+percent_visitor_victory = stat_tracker.percentage_visitor_wins(all_games)
+puts percent_visitor_victory

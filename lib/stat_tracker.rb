@@ -50,7 +50,8 @@ class StatTracker
   end
   
   def percentage_visitor_wins(games)
-    
+    visitor_wins = games.reduce(0) {|total, game| total += 1 if game.away_goals > game.home_goals; total }
+    visitor_wins / games.length.to_f * 100
   end
   
   def percentage_ties(games)
