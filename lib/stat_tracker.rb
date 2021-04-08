@@ -71,7 +71,8 @@ class StatTracker
   end
   
   def average_goals_per_game(games)
-  
+    total_goals = games.reduce(0) {|total, game| total += (game.away_goals + game.home_goals); total}
+    total_goals / games.length.to_f
   end
   
   def average_goals_by_season(games)
