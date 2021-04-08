@@ -14,4 +14,7 @@ locations = {
 
 stat_tracker = StatTracker.from_csv(locations)
 all_games = stat_tracker.game_collection
-highest_score = stat_tracker.highest_total_score(all_games)
+highest_combined_score = stat_tracker.highest_total_score(all_games)
+lowest_combined_score = stat_tracker.lowest_total_score(all_games)
+
+puts lowest_combined_score
