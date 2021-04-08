@@ -3,7 +3,7 @@ class Game
 
   def initialize(data)
     @game_id = data[0].to_i
-    @season = [data[1][0..3].to_i,data[1][4..7].to_i]
+    @season = data[1].to_i
     @type = data[2]
     @date_time = Date.strptime(data[3], "%m/%d/%Y")
     @away_team_id = data[4].to_i

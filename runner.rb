@@ -19,3 +19,5 @@ lowest_combined_score = stat_tracker.lowest_total_score(all_games)
 percent_home_victory = stat_tracker.percentage_home_wins(all_games)
 percent_visitor_victory = stat_tracker.percentage_visitor_wins(all_games)
 percent_score_even = stat_tracker.percentage_ties(percent_home_victory, percent_visitor_victory)
+num_games_per_season = stat_tracker.count_of_games_by_season(all_games)
+puts num_games_per_season

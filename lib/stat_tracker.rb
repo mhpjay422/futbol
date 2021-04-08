@@ -59,7 +59,15 @@ class StatTracker
   end
   
   def count_of_games_by_season(games)
-  
+    hash = {}
+    games.each do |game|
+      if hash[game.season]
+        hash[game.season] += 1
+      else 
+        hash[game.season] = 1
+      end
+    end
+    hash
   end
   
   def average_goals_per_game(games)
