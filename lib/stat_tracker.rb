@@ -17,4 +17,49 @@ class StatTracker
   def game_collection
     Game.load_games(@games)
   end
+
+  def team_collection 
+
+  end
+
+  def single_team_stats_specific_game_collection 
+
+  end
+
+  def highest_total_score(games)    
+    games.reduce(0) do |highest, game| 
+      if game.away_goals + game.home_goals > highest
+        highest = game.away_goals + game.home_goals
+      end
+      highest
+    end
+  end
+  
+  def lowest_total_score
+  
+  end
+  
+  def percentage_home_wins
+  
+  end
+  
+  def percentage_visitor_wins
+  
+  end
+  
+  def percentage_ties
+  
+  end
+  
+  def count_of_games_by_season
+  
+  end
+  
+  def average_goals_per_game
+  
+  end
+  
+  def average_goals_by_season
+  
+  end
 end
