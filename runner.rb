@@ -11,6 +11,6 @@ locations = {
 }
 
 stat_tracker = StatTracker.from_csv(locations)
-puts "Hello World"
+
 
 require 'pry'; binding.pry
