@@ -99,19 +99,21 @@ class StatTracker
     game_stats.map {|game| game.team_id}.uniq!.length
   end
 
-  def total_games_and_points(game_stats)
+  def total_games_and_points(game_stats, hoa=nil)
     totaled = game_stats.reduce({}) do |total, game|
       team_id  = game.team_id
       goals = game.goals
 
-      if total[team_id] == nil
-        total[team_id] = [1, goals]        
-      else 
-        games = total[team_id][0] + 1
-        cumulative_goals = total[team_id][1] + goals
+      if hoa == nil || game.HoA == hoa 
+        if total[team_id] == nil
+          total[team_id] = [1, goals]        
+        else 
+          games = total[team_id][0] + 1
+          cumulative_goals = total[team_id][1] + goals
 
-        total[team_id] = [games, cumulative_goals]
-      end
+          total[team_id] = [games, cumulative_goals]
+        end
+      end  
       total
     end
   end
@@ -136,29 +138,29 @@ class StatTracker
 
   def worst_offense(game_stats)
     totaled = total_games_and_points(game_stats)
-
     averaged = averaged(totaled)
-
     worst_offense_id = averaged.max_by {|team| -team[1]}[0]
-
     worst_offense_team = self.team_collection.find {|team| team.team_id == worst_offense_id}.team_name 
   end
 
   def highest_scoring_visitor(game_stats)
-
+    visitor_totals = total_games_and_points(game_stats, "away")
+    averaged = averaged(visitor_totals)
+    highest_scoring_visitor_id = averaged.max_by {|team| team[1]}[0]
+    highest_scoring_visitor_team = self.team_collection.find {|team| team.team_id == highest_scoring_visitor_id}.team_name 
   end
 
-  def highest_scoring_home_team(game_stats)
+  # def highest_scoring_home_team(game_stats)
 
-  end
+  # end
 
-  def lowest_scoring_visitor(game_stats)
+  # def lowest_scoring_visitor(game_stats)
 
-  end
+  # end
 
-  def lowest_scoring_home_team(game_stats)
+  # def lowest_scoring_home_team(game_stats)
 
-  end
+  # end
 
 #
 # 
@@ -178,33 +180,33 @@ class StatTracker
     hash
   end
   
-  def best_season
+  # def best_season
 
-  end
+  # end
 
-  def worst_season
+  # def worst_season
 
-  end
+  # end
 
-  def average_win_percentage
+  # def average_win_percentage
 
-  end
+  # end
 
-  def most_goals_scored
+  # def most_goals_scored
 
-  end
+  # end
 
-  def fewest_goals_scored
+  # def fewest_goals_scored
 
-  end
+  # end
 
-  def favorite_opponent
+  # def favorite_opponent
 
-  end
+  # end
 
-  def rival
+  # def rival
 
-  end
+  # end
 
 
 
