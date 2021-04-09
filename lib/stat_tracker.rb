@@ -213,20 +213,55 @@ class StatTracker
     averaged = average_head_coaching_wins(total_wins_and_games)
     win_coach = averaged.max_by {|coach| -coach[1]}
   end
+
+  def culmulative_shooting_stats_by_team(find_games_for_season, game_stats)
+    game_stats.reduce({}) do |total, game|
+      team_id = game.team_id
+      shots = game.shots
+      goals = game.goals
+
+
+      if find_games_for_season.any? {|gm| game.game_id == gm.game_id }
+        if total[team_id] != nil
+          total_goals = total[team_id][0] + goals
+          total_shots = total[team_id][1] + shots
+          total[team_id] = [total_goals, total_shots]
+        else
+          total[team_id] = [goals, shots]
+        end
+      end
+      
+      total
+    end
+  end
+
+  def average_shooting_stats(total_shooting_stats)
+    total_shooting_stats.map do |data|
+      team = data[0]
+      goals = data[1][0]
+      shots = data[1][1]
+      [team, goals/shots.to_f]
+    end
+  end
   
-  # def most_accurate_team(game_stats)
+  def most_accurate_team(season_id, game_stats)
+    load_season_games = self.game_collection
+    find_games_for_season = load_season_games.select{|game| game.season == season_id}
+    total_shooting_stats = culmulative_shooting_stats_by_team(find_games_for_season, game_stats)
+    averaged = average_shooting_stats(total_shooting_stats)
+    best_shooting_team_id = averaged.max_by {|team| team[1]}[0]
+    best_shooting_team = self.team_collection.find {|team| team.team_id == best_shooting_team_id}.team_name
+  end
+  
+  # def least_accurate_team(season_id, game_stats)
 
   # end
   
-  # def least_accurate_team(game_stats)
+  # def most_tackles(season_id, game_stats)
 
   # end
   
-  # def most_tackles(game_stats)
-
-  # end
-  
-  # def fewest_tackles(game_stats)
+  # def fewest_tackles(season_id, game_stats)
 
   # end
   
