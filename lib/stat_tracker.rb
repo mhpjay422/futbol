@@ -206,9 +206,13 @@ class StatTracker
     win_coach = averaged.max_by {|coach| coach[1]}
   end
   
-  # def worst_coach(game_stats)
-
-  # end
+  def worst_coach(season_id, game_stats)
+    load_season_games = self.game_collection
+    find_games_for_season = load_season_games.select{|game| game.season == season_id}
+    total_wins_and_games = total_games_wins_by_coach(find_games_for_season, game_stats) 
+    averaged = average_head_coaching_wins(total_wins_and_games)
+    win_coach = averaged.max_by {|coach| -coach[1]}
+  end
   
   # def most_accurate_team(game_stats)
 
