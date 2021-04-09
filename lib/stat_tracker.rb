@@ -284,12 +284,17 @@ class StatTracker
     load_season_games = self.game_collection
     find_games_for_season = load_season_games.select{|game| game.season == season_id}
     count_tackles = culmulative_tackles_by_team_season(find_games_for_season, game_stats)
-    most_tackles = count_tackles.max_by {|team| team[1]}
+    most_tackles_id = count_tackles.max_by {|team| team[1]}[0]
+    self.team_collection.find {|team| team.team_id == most_tackles_id}.team_name
   end
   
-  # def fewest_tackles(season_id, game_stats)
-
-  # end
+  def fewest_tackles(season_id, game_stats)
+    load_season_games = self.game_collection
+    find_games_for_season = load_season_games.select{|game| game.season == season_id}
+    count_tackles = culmulative_tackles_by_team_season(find_games_for_season, game_stats)
+    least_tackles_id = count_tackles.max_by {|team| -team[1]}[0]
+    self.team_collection.find {|team| team.team_id == least_tackles_id}.team_name
+  end
   
 
 #
