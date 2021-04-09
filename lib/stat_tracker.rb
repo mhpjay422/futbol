@@ -99,7 +99,7 @@ class StatTracker
     game_stats.map {|game| game.team_id}.uniq!.length
   end
 
-  def best_offense(game_stats)
+  def total_games_and_points(game_stats)
     totaled = game_stats.reduce({}) do |total, game|
       team_id  = game.team_id
       goals = game.goals
@@ -113,12 +113,20 @@ class StatTracker
         total[team_id] = [games, cumulative_goals]
       end
       total
-    end    
-        
+    end
+  end
+
+  def averaged(totaled)
     averaged = totaled.map do |team| 
       average = team[1][1] / team[1][0].to_f
       [team[0], average]
     end
+  end
+
+  def best_offense(game_stats)
+    totaled = total_games_and_points(game_stats)  
+        
+    averaged = averaged(totaled)
 
     best_offense_id = averaged.max_by {|team| team[1]}[0]
 
@@ -127,7 +135,13 @@ class StatTracker
   end
 
   def worst_offense(game_stats)
+    totaled = total_games_and_points(game_stats)
 
+    averaged = averaged(totaled)
+
+    worst_offense_id = averaged.max_by {|team| -team[1]}[0]
+
+    worst_offense_team = self.team_collection.find {|team| team.team_id == worst_offense_id}.team_name 
   end
 
   def highest_scoring_visitor(game_stats)
