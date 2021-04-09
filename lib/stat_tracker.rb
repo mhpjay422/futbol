@@ -34,8 +34,8 @@ class StatTracker
       highest
     end
   end
-  
-  def lowest_total_score(games) 
+
+  def lowest_total_score(games)
     games.reduce(Float::INFINITY) do |lowest, game| 
       if game.away_goals + game.home_goals < lowest
         lowest = game.away_goals + game.home_goals
@@ -86,6 +86,52 @@ class StatTracker
 
     hash = hash.each {|game| hash[game[0]] = game[1][1] / game[1][0].to_f.round(2)}
   end
+
+  def team_info(teams)
+    hash = {}
+    teams.each do |team| 
+      teamhash = {}
+      teamhash[:team_id] = team.team_id
+      teamhash[:franchise_id] = team.franchise_id
+      teamhash[:abbreviation] = team.abbreviation
+      teamhash[:stadium] = team.stadium
+      teamhash[:link] = team.link
+      
+      binding.pry
+      
+      hash[team.team_name.gsub(/\s+/, "_").to_sym] = teamhash
+    end
+    hash
+  end
+  
+  def best_season
+
+  end
+
+  def worst_season
+
+  end
+
+  def average_win_percentage
+
+  end
+
+  def most_goals_scored
+
+  end
+
+  def fewest_goals_scored
+
+  end
+
+  def favorite_opponent
+
+  end
+
+  def rival
+
+  end
+
 
 
 end

@@ -26,3 +26,4 @@ stat_tracker = StatTracker.from_csv(locations)
 # puts avg_goals_season = stat_tracker.average_goals_by_season(all_games)
 
 all_teams = stat_tracker.team_collection
+puts info_team = stat_tracker.team_info(all_teams)
