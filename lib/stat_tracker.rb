@@ -110,7 +110,6 @@ class StatTracker
         else 
           games = total[team_id][0] + 1
           cumulative_goals = total[team_id][1] + goals
-
           total[team_id] = [games, cumulative_goals]
         end
       end  
@@ -127,13 +126,9 @@ class StatTracker
 
   def best_offense(game_stats)
     totaled = total_games_and_points(game_stats)  
-        
     averaged = averaged(totaled)
-
     best_offense_id = averaged.max_by {|team| team[1]}[0]
-
     best_offense_team = self.team_collection.find {|team| team.team_id == best_offense_id}.team_name    
-
   end
 
   def worst_offense(game_stats)
@@ -146,17 +141,23 @@ class StatTracker
   def highest_scoring_visitor(game_stats)
     visitor_totals = total_games_and_points(game_stats, "away")
     averaged = averaged(visitor_totals)
-    highest_scoring_visitor_id = averaged.max_by {|team| team[1]}[0]
-    highest_scoring_visitor_team = self.team_collection.find {|team| team.team_id == highest_scoring_visitor_id}.team_name 
+    high_score_vis_id = averaged.max_by {|team| team[1]}[0]
+    high_score_vis_team = self.team_collection.find {|team| team.team_id == high_score_vis_id}.team_name 
   end
 
-  # def highest_scoring_home_team(game_stats)
+  def highest_scoring_home_team(game_stats)
+    home_totals = total_games_and_points(game_stats, "home")
+    averaged = averaged(home_totals)
+    high_score_home_id = averaged.max_by {|team| team[1]}[0]
+    high_score_home_team = self.team_collection.find {|team| team.team_id == high_score_home_id}.team_name 
+  end
 
-  # end
-
-  # def lowest_scoring_visitor(game_stats)
-
-  # end
+  def lowest_scoring_visitor(game_stats)
+    visitor_totals = total_games_and_points(game_stats, "away")
+    averaged = averaged(visitor_totals)
+    low_score_vis_id = averaged.max_by {|team| -team[1]}[0]
+    low_score_vis_team = self.team_collection.find {|team| team.team_id == low_score_vis_id}.team_name 
+  end
 
   # def lowest_scoring_home_team(game_stats)
 

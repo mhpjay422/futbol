@@ -32,6 +32,8 @@ all_game_teams = stat_tracker.single_team_stats_specific_game_collection
 # puts num_teams = stat_tracker.count_of_teams(all_game_teams)
 # puts best_scoring_team = stat_tracker.best_offense(all_game_teams)
 # puts worst_scoring_team = stat_tracker.worst_offense(all_game_teams)
-puts high_scoring_visitor = stat_tracker.highest_scoring_visitor(all_game_teams)
+# puts high_scoring_visitor = stat_tracker.highest_scoring_visitor(all_game_teams)
+# puts high_scoring_home_team = stat_tracker.highest_scoring_home_team(all_game_teams)
+puts low_scoring_visitor = stat_tracker.lowest_scoring_visitor(all_game_teams)
 
 # puts info_team = stat_tracker.team_info(all_teams)
