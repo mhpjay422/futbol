@@ -262,9 +262,29 @@ class StatTracker
     best_shooting_team_id = averaged.max_by {|team| -team[1]}[0]
     best_shooting_team = self.team_collection.find {|team| team.team_id == best_shooting_team_id}.team_name
   end
-  
-  def most_tackles(season_id, game_stats)
 
+  def culmulative_tackles_by_team_season(find_games_for_season, game_stats)
+    game_stats.reduce({}) do |total, game|
+      team_id = game.team_id
+      tackles = game.tackles
+
+      if find_games_for_season.any? {|gm| game.game_id == gm.game_id }
+        if total[team_id] != nil
+          total[team_id] = total[team_id] + tackles
+        else
+          total[team_id] = tackles
+        end
+      end
+      
+      total
+    end
+  end
+
+  def most_tackles(season_id, game_stats)
+    load_season_games = self.game_collection
+    find_games_for_season = load_season_games.select{|game| game.season == season_id}
+    count_tackles = culmulative_tackles_by_team_season(find_games_for_season, game_stats)
+    most_tackles = count_tackles.max_by {|team| team[1]}
   end
   
   # def fewest_tackles(season_id, game_stats)
