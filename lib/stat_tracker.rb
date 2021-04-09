@@ -159,9 +159,12 @@ class StatTracker
     low_score_vis_team = self.team_collection.find {|team| team.team_id == low_score_vis_id}.team_name 
   end
 
-  # def lowest_scoring_home_team(game_stats)
-
-  # end
+  def lowest_scoring_home_team(game_stats)
+    home_totals = total_games_and_points(game_stats, "home")
+    averaged = averaged(home_totals)
+    low_score_home_id = averaged.max_by {|team| -team[1]}[0]
+    low_score_home_team = self.team_collection.find {|team| team.team_id == low_score_home_id}.team_name
+  end
 
 #
 # 
