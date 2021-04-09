@@ -23,8 +23,12 @@ class StatTracker
   end
 
   def single_team_stats_specific_game_collection 
-
+    GameTeam.load_game_team(@games_teams)
   end
+
+#
+# GAME STATISTICS  
+#
 
   def highest_total_score(games)    
     games.reduce(0) do |highest, game| 
@@ -87,6 +91,65 @@ class StatTracker
     hash = hash.each {|game| hash[game[0]] = game[1][1] / game[1][0].to_f.round(2)}
   end
 
+#
+# LEAGUE STATISTICS
+#
+
+  def count_of_teams(game_stats)
+    game_stats.map {|game| game.team_id}.uniq!.length
+  end
+
+  def best_offense(game_stats)
+    totaled = game_stats.reduce({}) do |total, game|
+      team_id  = game.team_id
+      goals = game.goals
+
+      if total[team_id] == nil
+        total[team_id] = [1, goals]        
+      else 
+        games = total[team_id][0] + 1
+        cumulative_goals = total[team_id][1] + goals
+
+        total[team_id] = [games, cumulative_goals]
+      end
+      total
+    end    
+        
+    averaged = totaled.map do |team| 
+      average = team[1][1] / team[1][0].to_f
+      [team[0], average]
+    end
+
+    best_offense_id = averaged.max_by {|team| team[1]}[0]
+
+    best_offense_team = self.team_collection.find {|team| team.team_id == best_offense_id}.team_name    
+
+  end
+
+  def worst_offense(game_stats)
+
+  end
+
+  def highest_scoring_visitor(game_stats)
+
+  end
+
+  def highest_scoring_home_team(game_stats)
+
+  end
+
+  def lowest_scoring_visitor(game_stats)
+
+  end
+
+  def lowest_scoring_home_team(game_stats)
+
+  end
+
+#
+# 
+#
+
   def team_info(teams)
     hash = {}
     teams.each do |team| 
@@ -96,9 +159,6 @@ class StatTracker
       teamhash[:abbreviation] = team.abbreviation
       teamhash[:stadium] = team.stadium
       teamhash[:link] = team.link
-      
-      binding.pry
-      
       hash[team.team_name.gsub(/\s+/, "_").to_sym] = teamhash
     end
     hash

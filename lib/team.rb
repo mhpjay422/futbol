@@ -16,4 +16,9 @@ class Team
     end
     arr
   end
+
+  def self.find(id)
+    Team.all.find {|team| team.team_id == id}
+  end
+  
 end 
