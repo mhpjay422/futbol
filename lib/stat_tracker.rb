@@ -303,45 +303,46 @@ class StatTracker
 
 
 
-  def team_info(teams)
-    hash = {}
-    teams.each do |team| 
-      teamhash = {}
-      teamhash[:team_id] = team.team_id
-      teamhash[:franchise_id] = team.franchise_id
-      teamhash[:abbreviation] = team.abbreviation
-      teamhash[:stadium] = team.stadium
-      teamhash[:link] = team.link
-      hash[team.team_name.gsub(/\s+/, "_").to_sym] = teamhash
-    end
-    hash
+  def team_info(team_id)
+    load_teams = self.team_collection
+    team = load_teams.find {|team| team.team_id.to_i == team_id}
+    teamhash = {}
+
+    teamhash[:team_id] = team.team_id
+    teamhash[:franchise_id] = team.franchise_id
+    teamhash[:abbreviation] = team.abbreviation
+    teamhash[:stadium] = team.stadium
+    teamhash[:link] = team.link    
+    teamhash[team.team_name.gsub(/\s+/, "_").to_sym] = team.team_name
+
+    teamhash
   end
   
-  # def best_season
+  def best_season(team_id)
+
+  end
+
+  # def worst_season(team_id)
 
   # end
 
-  # def worst_season
+  # def average_win_percentage(team_id)
 
   # end
 
-  # def average_win_percentage
+  # def most_goals_scored(team_id)
 
   # end
 
-  # def most_goals_scored
+  # def fewest_goals_scored(team_id)
 
   # end
 
-  # def fewest_goals_scored
+  # def favorite_opponent(team_id)
 
   # end
 
-  # def favorite_opponent
-
-  # end
-
-  # def rival
+  # def rival(team_id)
 
   # end
 

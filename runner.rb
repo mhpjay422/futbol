@@ -51,8 +51,8 @@ all_game_teams = stat_tracker.single_team_stats_specific_game_collection
 # puts most_team_tackles = stat_tracker.most_tackles(20122013, all_game_teams)
 # puts most_team_tackles = stat_tracker.most_tackles(20132014, all_game_teams)
 # puts most_team_tackles = stat_tracker.most_tackles(20142015, all_game_teams)
-puts least_team_tackles = stat_tracker.fewest_tackles(20122013, all_game_teams)
-puts least_team_tackles = stat_tracker.fewest_tackles(20132014, all_game_teams)
-puts least_team_tackles = stat_tracker.fewest_tackles(20142015, all_game_teams)
+# puts least_team_tackles = stat_tracker.fewest_tackles(20122013, all_game_teams)
+# puts least_team_tackles = stat_tracker.fewest_tackles(20132014, all_game_teams)
+# puts least_team_tackles = stat_tracker.fewest_tackles(20142015, all_game_teams)
 
-puts info_team = stat_tracker.team_info(all_teams)
+puts info_team = stat_tracker.team_info(1)
