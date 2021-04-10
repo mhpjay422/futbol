@@ -379,9 +379,14 @@ class StatTracker
     end
   end
 
-  # def fewest_goals_scored(team_id)
-
-  # end
+  def fewest_goals_scored(team_id)
+    load_games = self.single_team_stats_specific_game_collection
+    load_games.reduce(Float::INFINITY) do |total, game| 
+      
+      total = game.goals if game.team_id == team_id.to_s && game.goals < total
+      total
+    end
+  end
 
   # def favorite_opponent(team_id)
 

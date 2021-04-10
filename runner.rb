@@ -59,4 +59,5 @@ all_game_teams = stat_tracker.single_team_stats_specific_game_collection
 # puts best_season_for_team = stat_tracker.best_season(1)
 # puts worst_season_for_team = stat_tracker.worst_season(1)
 # puts worst_season_for_team = stat_tracker.average_win_percentage(6)
-puts most_goals_for_team = stat_tracker.most_goals_scored(6)
+# puts most_goals_for_team = stat_tracker.most_goals_scored(6)
+puts most_goals_for_team = stat_tracker.fewest_goals_scored(9)
