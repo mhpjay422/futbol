@@ -420,10 +420,12 @@ class StatTracker
     self.team_collection.find {|team| team.team_id.to_i == best_win_opponent_id}.team_name
   end
 
-  # def rival(team_id)
+  def rival(team_id)
+    load_games = self.game_collection
+    opposing_win_data = win_loss_vs_opponents(team_id, load_games)
+    worst_win_opponent_id = opposing_win_data.max_by {|oppo| -(oppo[1][0] / oppo[1][1].to_f)}[0]
+    self.team_collection.find {|team| team.team_id.to_i == worst_win_opponent_id}.team_name
+  end
 
-  # end
-
-
-
+  
 end
