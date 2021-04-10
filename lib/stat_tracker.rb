@@ -341,17 +341,22 @@ class StatTracker
       [season[0], season[1][0] / season[1][1].to_f]
     end
   end
-  
-  def best_season(team_id)
+
+  def find_season_avgs_for_team(team_id)
     load_games = self.single_team_stats_specific_game_collection
     find_games_for_team = team_game_data(team_id, load_games)
     averaged = average_team_win_loss(find_games_for_team)
+  end
+  
+  def best_season(team_id)
+    team_season_avgs = find_season_avgs_for_team(team_id)
     best_season = averaged.max_by {|season| season[1]}[0]
   end
 
-  # def worst_season(team_id)
-
-  # end
+  def worst_season(team_id)
+    team_season_avgs = find_season_avgs_for_team(team_id)
+    worst_season = averaged.max_by {|season| -season[1]}[0]
+  end
 
   # def average_win_percentage(team_id)
 

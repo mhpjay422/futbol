@@ -56,6 +56,5 @@ all_game_teams = stat_tracker.single_team_stats_specific_game_collection
 # puts least_team_tackles = stat_tracker.fewest_tackles(20142015, all_game_teams)
 
 # puts info_team = stat_tracker.team_info(1)
-puts best_season_for_team = stat_tracker.best_season(1)
-puts best_season_for_team = stat_tracker.best_season(3)
-puts best_season_for_team = stat_tracker.best_season(6)
+# puts best_season_for_team = stat_tracker.best_season(1)
+puts worst_season_for_team = stat_tracker.worst_season(1)
