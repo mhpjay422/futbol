@@ -388,9 +388,37 @@ class StatTracker
     end
   end
 
-  # def favorite_opponent(team_id)
+  def win_loss_vs_opponents(team_id, load_games)
+    load_games.reduce({}) do |total, game| 
+      home_team_id = game.home_team_id
+      away_team_id = game.away_team_id
+      is_team_home = home_team_id == team_id ? true  : false
+      did_home_win = game.home_goals > game.away_goals ? true : false
+      did_team_win = is_team_home == did_home_win
+      opponent_id = is_team_home ? away_team_id : home_team_id
+      win_or_loss = did_team_win ? 1 : 0
+      
+      if home_team_id == team_id || away_team_id == team_id
 
-  # end
+        if total[opponent_id] == nil
+          total[opponent_id] = [win_or_loss,1]
+        else 
+          wins = total[opponent_id][0] + win_or_loss
+          games = total[opponent_id][1] + 1
+          total[opponent_id] = [wins, games]
+        end
+      end
+
+      total   
+    end
+  end
+
+  def favorite_opponent(team_id)
+    load_games = self.game_collection
+    opposing_win_data = win_loss_vs_opponents(team_id, load_games)
+    best_win_opponent_id = opposing_win_data.max_by {|oppo| oppo[1][0] / oppo[1][1].to_f}[0]
+    self.team_collection.find {|team| team.team_id.to_i == best_win_opponent_id}.team_name
+  end
 
   # def rival(team_id)
 
