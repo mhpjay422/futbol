@@ -317,9 +317,36 @@ class StatTracker
 
     teamhash
   end
+
+  def team_game_data(team_id, load_games)    
+    load_games.reduce({}) do |total, game| 
+      win_or_loss = game.result == 'WIN' ? 1 : 0
+      season = game.game_id.to_s[0..3]
+      
+      if game.team_id == team_id.to_s
+        if total[season] == nil
+          total[season] = [win_or_loss,1]
+        else 
+          wins = total[season][0] + win_or_loss
+          games = total[season][1] + 1
+          total[season] = [wins, games]
+        end
+      end    
+      total   
+    end
+  end
+
+  def average_team_win_loss(find_games_for_team)
+    find_games_for_team.map do |season| 
+      [season[0], season[1][0] / season[1][1].to_f]
+    end
+  end
   
   def best_season(team_id)
-
+    load_games = self.single_team_stats_specific_game_collection
+    find_games_for_team = team_game_data(team_id, load_games)
+    averaged = average_team_win_loss(find_games_for_team)
+    best_season = averaged.max_by {|season| season[1]}[0]
   end
 
   # def worst_season(team_id)
