@@ -170,12 +170,12 @@ class StatTracker
 # Season Statistics
 #
 
-  def total_games_wins_by_coach(find_games_for_season, game_stats) 
+  def total_games_wins_by_coach(find_seasons_for_team, game_stats) 
     game_stats.reduce({}) do |total, game|
       head_coach = game.head_coach
       win_or_loss = game.result == 'WIN' ? 1 : 0
 
-      if find_games_for_season.any? {|gm| game.game_id == gm.game_id }
+      if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
         if total[head_coach] != nil
           wins = total[head_coach][0] + win_or_loss
           games = total[head_coach][1] + 1
@@ -200,28 +200,28 @@ class StatTracker
 
   def winningest_coach(season_id, game_stats)
     load_season_games = self.game_collection
-    find_games_for_season = load_season_games.select{|game| game.season == season_id}
-    total_wins_and_games = total_games_wins_by_coach(find_games_for_season, game_stats) 
+    find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
+    total_wins_and_games = total_games_wins_by_coach(find_seasons_for_team, game_stats) 
     averaged = average_head_coaching_wins(total_wins_and_games)
     win_coach = averaged.max_by {|coach| coach[1]}
   end
   
   def worst_coach(season_id, game_stats)
     load_season_games = self.game_collection
-    find_games_for_season = load_season_games.select{|game| game.season == season_id}
-    total_wins_and_games = total_games_wins_by_coach(find_games_for_season, game_stats) 
+    find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
+    total_wins_and_games = total_games_wins_by_coach(find_seasons_for_team, game_stats) 
     averaged = average_head_coaching_wins(total_wins_and_games)
     win_coach = averaged.max_by {|coach| -coach[1]}
   end
 
-  def culmulative_shooting_stats_by_team(find_games_for_season, game_stats)
+  def culmulative_shooting_stats_by_team(find_seasons_for_team, game_stats)
     game_stats.reduce({}) do |total, game|
       team_id = game.team_id
       shots = game.shots
       goals = game.goals
 
 
-      if find_games_for_season.any? {|gm| game.game_id == gm.game_id }
+      if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
         if total[team_id] != nil
           total_goals = total[team_id][0] + goals
           total_shots = total[team_id][1] + shots
@@ -246,8 +246,8 @@ class StatTracker
 
   def get_avg_shooting_stats_by_team(season_id, game_stats)
     load_season_games = self.game_collection
-    find_games_for_season = load_season_games.select{|game| game.season == season_id}
-    total_shooting_stats = culmulative_shooting_stats_by_team(find_games_for_season, game_stats)
+    find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
+    total_shooting_stats = culmulative_shooting_stats_by_team(find_seasons_for_team, game_stats)
     averaged = average_shooting_stats(total_shooting_stats)
   end
   
@@ -263,12 +263,12 @@ class StatTracker
     best_shooting_team = self.team_collection.find {|team| team.team_id == best_shooting_team_id}.team_name
   end
 
-  def culmulative_tackles_by_team_season(find_games_for_season, game_stats)
+  def culmulative_tackles_by_team_season(find_seasons_for_team, game_stats)
     game_stats.reduce({}) do |total, game|
       team_id = game.team_id
       tackles = game.tackles
 
-      if find_games_for_season.any? {|gm| game.game_id == gm.game_id }
+      if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
         if total[team_id] != nil
           total[team_id] = total[team_id] + tackles
         else
@@ -282,16 +282,16 @@ class StatTracker
 
   def most_tackles(season_id, game_stats)
     load_season_games = self.game_collection
-    find_games_for_season = load_season_games.select{|game| game.season == season_id}
-    count_tackles = culmulative_tackles_by_team_season(find_games_for_season, game_stats)
+    find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
+    count_tackles = culmulative_tackles_by_team_season(find_seasons_for_team, game_stats)
     most_tackles_id = count_tackles.max_by {|team| team[1]}[0]
     self.team_collection.find {|team| team.team_id == most_tackles_id}.team_name
   end
   
   def fewest_tackles(season_id, game_stats)
     load_season_games = self.game_collection
-    find_games_for_season = load_season_games.select{|game| game.season == season_id}
-    count_tackles = culmulative_tackles_by_team_season(find_games_for_season, game_stats)
+    find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
+    count_tackles = culmulative_tackles_by_team_season(find_seasons_for_team, game_stats)
     least_tackles_id = count_tackles.max_by {|team| -team[1]}[0]
     self.team_collection.find {|team| team.team_id == least_tackles_id}.team_name
   end
@@ -336,31 +336,39 @@ class StatTracker
     end
   end
 
-  def average_team_win_loss(find_games_for_team)
-    find_games_for_team.map do |season| 
+  def average_team_win_loss(find_seasons_for_team)
+    find_seasons_for_team.map do |season| 
       [season[0], season[1][0] / season[1][1].to_f]
     end
   end
-
-  def find_season_avgs_for_team(team_id)
-    load_games = self.single_team_stats_specific_game_collection
-    find_games_for_team = team_game_data(team_id, load_games)
-    averaged = average_team_win_loss(find_games_for_team)
-  end
   
   def best_season(team_id)
-    team_season_avgs = find_season_avgs_for_team(team_id)
+    load_games = self.single_team_stats_specific_game_collection
+    find_seasons_for_team = team_game_data(team_id, load_games)
+    averaged = average_team_win_loss(find_seasons_for_team)
     best_season = averaged.max_by {|season| season[1]}[0]
   end
 
   def worst_season(team_id)
-    team_season_avgs = find_season_avgs_for_team(team_id)
+    load_games = self.single_team_stats_specific_game_collection
+    find_seasons_for_team = team_game_data(team_id, load_games)
+    averaged = average_team_win_loss(find_seasons_for_team)
     worst_season = averaged.max_by {|season| -season[1]}[0]
   end
 
-  # def average_win_percentage(team_id)
+  def average_win_percentage(team_id)
+    load_games = self.single_team_stats_specific_game_collection
+    
+    totaled = load_games.reduce([0,0]) do |total, game| 
+      win_or_loss = game.result == 'WIN' ? 1 : 0
+      wins = total[0] + win_or_loss
+      games = total[1] + 1
+      
+      game.team_id == team_id.to_s ? total = [wins, games] : total
+    end
 
-  # end
+    total_avg = totaled[0] / totaled[1].to_f * 100
+  end
 
   # def most_goals_scored(team_id)
 
