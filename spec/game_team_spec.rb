@@ -24,7 +24,7 @@ describe GameTeam do
       it 'returns an array of GameTeam objects' do 
 
         expect(GameTeam.load_game_team('../data/game_teams.csv').class).to eq(Array)
-        expect(GameTeam.load_game_team('../data/game_teams.csv').all? {|team| team.class == GameTeam}).to eq(true)
+        expect(GameTeam.load_game_team('../data/game_teams.csv').all? {|game| game.class == GameTeam}).to eq(true)
       end
     end
   end
