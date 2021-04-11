@@ -21,9 +21,10 @@ describe Team do
 
   describe '::load_teams' do 
     context 'given a file path to the csv data' do 
-      it 'returns an array of team objects' do 
+      it 'returns an array of Team objects' do 
 
         expect(Team.load_teams('../data/teams.csv').class).to eq(Array)
+        expect(Team.load_teams('../data/teams.csv').all? {|team| team.class == Team}).to eq(true)
       end
     end
   end
