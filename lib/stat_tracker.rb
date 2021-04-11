@@ -3,11 +3,11 @@ require 'csv'
 
 class StatTracker
 
-  attr_reader :games, :teams, :games_teams
+  attr_reader :games, :teams, :game_teams
   def initialize(locations)
     @games = locations[:games]
     @teams = locations[:teams]
-    @games_teams = locations[:game_teams]
+    @game_teams = locations[:game_teams]
   end
 
   def self.from_csv(locations)
@@ -23,7 +23,7 @@ class StatTracker
   end
 
   def single_team_stats_specific_game_collection 
-    GameTeam.load_game_team(@games_teams)
+    GameTeam.load_game_team(@game_teams)
   end
 
 #
@@ -302,7 +302,6 @@ class StatTracker
 #
 
 
-
   def team_info(team_id)
     load_teams = self.team_collection
     team = load_teams.find {|team| team.team_id.to_i == team_id}
@@ -427,5 +426,5 @@ class StatTracker
     self.team_collection.find {|team| team.team_id.to_i == worst_win_opponent_id}.team_name
   end
 
-  
+
 end
