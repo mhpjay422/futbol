@@ -1,12 +1,17 @@
 require_relative './modules/finder'
 require_relative './modules/data_loader.rb'
+require_relative './stat_tracker'
+require_relative './game'
+require_relative './team'
+require_relative './game_team'
 require 'pry'
+
 
 
 class StatTracker
 
-  def self.from_csv
-    StatTracker.new
+  def self.from_csv(locations)
+    @track = StatTracker.new
   end
 
   def highest_total_score
