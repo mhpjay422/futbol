@@ -25,16 +25,16 @@ class StatTracker
     # end
   end
 
-  # def lowest_total_score(games)
-    # sorted_scores = Game.sort_by_total_score
-    # lowest = sorted_scores.first.total_score
+  def lowest_total_score
+    sorted_scores = Game.sort_by_total_score
+    lowest = sorted_scores.first.total_score
     # games.reduce(Float::INFINITY) do |lowest, game| 
     #   if game.away_goals + game.home_goals < lowest
     #     lowest = game.away_goals + game.home_goals
     #   end
     #   lowest
     # end
-  # end
+  end
   
 #   def percentage_home_wins(games)
 #     home_wins = games.reduce(0) {|total, game| total += 1 if game.home_goals > game.away_goals; total }
