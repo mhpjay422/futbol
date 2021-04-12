@@ -1,3 +1,5 @@
+
+
 class GameTeam
 
   attr_reader :game_id, :team_id, :HoA, :result,:settled_in, :head_coach, :goals, :shots, :tackles, :pim, :powerPlayOpportunities, :powerPlayGoals, :faceOffWinPercentage, :giveaways, :takeaways
@@ -19,9 +21,9 @@ class GameTeam
     @takeaways = data[14].to_i
   end
 
-  def self.load_game_team(data) 
+  def self.load_game_team
     arr = []
-    CSV.foreach(data, headers:true, header_converters: :symbol) do |row|
+    CSV.foreach('./data/game_teams.csv', headers:true, header_converters: :symbol) do |row|
       arr << GameTeam.new(row)
     end
     arr

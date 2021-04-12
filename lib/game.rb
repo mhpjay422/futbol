@@ -14,9 +14,9 @@ class Game
     @venue_link = data[9]
   end
 
-  def self.load_games(data)
+  def self.load_games
     arr = []
-    CSV.foreach(data, headers:true, header_converters: :symbol) do |row|
+    CSV.foreach('./data/games.csv', headers:true, header_converters: :symbol) do |row|
       arr << Game.new(row)
     end
     arr

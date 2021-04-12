@@ -9,9 +9,9 @@ class Team
     @link = data[5]
   end
 
-  def self.load_teams(data)
+  def self.load_teams
     arr = []
-    CSV.foreach(data, headers:true, header_converters: :symbol) do |row|
+    CSV.foreach('./data/teams.csv', headers:true, header_converters: :symbol) do |row|
       arr << Team.new(row)
     end
     arr

@@ -15,15 +15,15 @@ class StatTracker
   end
 
   def game_collection
-    Game.load_games(@games)
+    Game.load_games
   end
 
   def team_collection 
-    Team.load_teams(@teams)
+    Team.load_teams
   end
 
   def single_team_stats_specific_game_collection 
-    GameTeam.load_game_team(@game_teams)
+    GameTeam.load_game_team
   end
 
 #
