@@ -101,9 +101,29 @@ describe StatTracker do
       end
     end
 
+    describe 'average number of goals per season' do 
+      context 'given an array of game stats' do 
+        it 'returns a hash of the average number of goals scored per season' do 
 
-
+          expect(@stat_tracker.average_goals_by_season(@all_games)).to eq(
+            {20122013=>4.121588089330025, 20162017=>4.225512528473804, 20142015=>4.140257771038666, 20152016=>4.162755488266465, 20132014=>4.192743764172335, 20172018=>4.442066420664206}
+          )
+        end
+      end
+    end
   end
+
+  describe 'League Statistics' do 
+
+    describe 'number of teams' do 
+      context 'given an array of game-team stats' do 
+        it 'returns the total number of teams in the league' do 
+          expect(@stat_tracker.count_of_teams(@all_game_teams)).to eq(32)
+        end
+      end
+    end
+  end  
+
 
 
 end 
