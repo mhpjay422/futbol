@@ -92,6 +92,17 @@ describe StatTracker do
       end
     end
 
+    describe 'average number of goals per game' do 
+      context 'given an array of game stats' do 
+        it 'returns the average number of goals scored per game' do 
+
+          expect(@stat_tracker.average_goals_per_game(@all_games)).to eq(4.221609998656095)
+        end
+      end
+    end
+
+
+
   end
 
 
