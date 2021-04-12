@@ -15,9 +15,7 @@ describe StatTracker do
       teams: team_path,
       game_teams: game_teams_path
     }
-
     @stat_tracker = StatTracker.new(@locations)
-
     @all_games = @stat_tracker.game_collection
     @all_teams = @stat_tracker.team_collection
     @all_game_teams = @stat_tracker.single_team_stats_specific_game_collection
@@ -75,11 +73,21 @@ describe StatTracker do
         @visitor_percent = @stat_tracker.percentage_visitor_wins(@all_games)
       end
 
-      context 'given an array of game stats' do 
+      context 'given the home and visitor win percentage' do 
         it 'returns the percentage of games that end in a tie' do 
 
-
           expect(@stat_tracker.percentage_ties(@home_percent, @visitor_percent)).to eq(20.39)
+        end
+      end
+    end
+
+    describe 'number of games per season' do 
+      context 'given an array of game stats' do 
+        it 'returns a hash with season ids as keys and the corresponding number of games as values' do 
+
+          expect(@stat_tracker.count_of_games_by_season(@all_games)).to eq(
+            {20122013=>806, 20162017=>1317, 20142015=>1319, 20152016=>1321, 20132014=>1323, 20172018=>1355}
+          )
         end
       end
     end
