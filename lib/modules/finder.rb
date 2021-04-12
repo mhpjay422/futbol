@@ -5,6 +5,6 @@ module Finder
   end
 
   def all 
-    @all ||= load_data
+    load_data
   end 
 end

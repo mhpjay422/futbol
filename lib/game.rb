@@ -1,4 +1,7 @@
 class Game
+  extend Finder
+  extend DataLoader
+
   attr_reader :game_id, :season, :type, :date_time, :away_team_id, :home_team_id,:away_goals, :home_goals, :venue, :venue_link
 
   def initialize(data)
@@ -14,11 +17,12 @@ class Game
     @venue_link = data[9]
   end
 
-  def self.load_games
-    arr = []
-    CSV.foreach('./data/games.csv', headers:true, header_converters: :symbol) do |row|
-      arr << Game.new(row)
-    end
-    arr
+  def self.sort_by_total_score
+    sorted = Game.all.sort_by {|game| game.home_goals + game.away_goals}
   end
+
+  def total_score 
+    home_goals + away_goals
+  end
+
 end 
