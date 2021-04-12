@@ -60,8 +60,31 @@ describe StatTracker do
       end
     end
 
+    describe 'percent visitor victory' do 
+      context 'given an array of game stats' do 
+        it 'returns the percentage of visitor wins from all games' do 
+          expect(@stat_tracker.percentage_visitor_wins(@all_games)).to eq(36.110737804058594)
+        end
+      end
+    end
+
+    describe 'percent tie game' do 
+
+      before do 
+        @home_percent = @stat_tracker.percentage_home_wins(@all_games)
+        @visitor_percent = @stat_tracker.percentage_visitor_wins(@all_games)
+      end
+
+      context 'given an array of game stats' do 
+        it 'returns the percentage of games that end in a tie' do 
+
+
+          expect(@stat_tracker.percentage_ties(@home_percent, @visitor_percent)).to eq(20.39)
+        end
+      end
+    end
 
   end
 
 
-end
+end 
