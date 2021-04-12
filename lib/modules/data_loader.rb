@@ -1,3 +1,5 @@
+require 'csv'
+
 module DataLoader 
   def load_data 
     arr = []
@@ -8,7 +10,7 @@ module DataLoader
   end
 
   def data_path 
-    case self
+    case 
     when self == Game 
       path = 'data/games.csv'
     when self == GameTeam
