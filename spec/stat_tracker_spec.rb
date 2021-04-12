@@ -44,6 +44,16 @@ describe StatTracker do
       end
     end
 
+    describe 'lowest total score' do 
+      context 'given an array of game stats' do 
+        it 'returns the lowest combined score from all games' do 
+          expect(@stat_tracker.lowest_total_score(@all_games)).to eq(0)
+        end
+      end
+    end
+
+
+
   end
 
 
