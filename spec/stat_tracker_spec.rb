@@ -52,6 +52,13 @@ describe StatTracker do
       end
     end
 
+    describe 'percent home victory' do 
+      context 'given an array of game stats' do 
+        it 'returns the percentage of home wins from all games' do 
+          expect(@stat_tracker.percentage_home_wins(@all_games)).to eq(43.50221744389195)
+        end
+      end
+    end
 
 
   end
