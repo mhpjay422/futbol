@@ -6,7 +6,7 @@ class Game
 
   def initialize(data)
     @game_id = data[0].to_i
-    @season = data[1].to_i
+    @season = data[1]
     @type = data[2]
     @date_time = data[3]
     # @date_time = Date.strptime(data[3], "%m/%d/%Y")
@@ -28,9 +28,6 @@ class Game
   end
 
   def winner 
-    
-    # binding.pry
-    
     return nil if home_goals == away_goals
     return self.home_team_id if home_goals > away_goals
     return self.away_team_id if away_goals > home_goals
@@ -59,6 +56,12 @@ class Game
        # if so, finds games where result is nil ( tie )
        # otherwise eval calls objective and target and brings back results that are equal
     end
+  end
+
+  def self.num_games_by_season
+    hash = {}
+    Game.all.each {|game| hash[game.season] ? hash[game.season] += 1 : hash[game.season] = 1}
+    hash
   end
 
 
