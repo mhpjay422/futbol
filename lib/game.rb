@@ -69,5 +69,24 @@ class Game
     (total_goals / Game.all.length.to_f).round(2)
   end
 
+  def self.avg_goals_by_season
+
+    reduced = Game.all.reduce({}) do |hash, game|
+      season = game.season
+      home_goals = game.home_goals
+      away_goals = game.away_goals
+
+      if hash[season]
+        hash[season][0] += 1
+        hash[season][1] += (home_goals + away_goals)
+      else 
+        hash[season] = [1, (home_goals + away_goals)]
+      end
+
+      hash
+    end
+    
+    result = reduced.each {|game| reduced[game[0]] = (game[1][1] / game[1][0].to_f).round(2)}
+  end
 
 end 
