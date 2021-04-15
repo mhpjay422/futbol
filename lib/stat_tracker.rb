@@ -52,9 +52,12 @@ class StatTracker
     # visitor_wins / games.length.to_f * 100.round(2)
   end
   
-#   def percentage_ties(home_percentage, away_percentage)
-#     100 - (home_percentage + away_percentage).to_f.round(2)
-#   end
+  def percentage_ties
+    total_wins = percentage_home_wins + percentage_visitor_wins
+    win_p = (100 - (total_wins * 100).round().to_f) / 100
+
+    # 100 - (home_percentage + away_percentage).to_f.round(2)
+  end
   
 #   def count_of_games_by_season
 #     hash = {}
