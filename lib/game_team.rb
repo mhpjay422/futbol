@@ -53,11 +53,28 @@ class GameTeam
     end
   end
 
-  def self.top_offense
+  def self.get_total_and_average(req)
     totaled = total_games_and_points(GameTeam.all)  
     averaged = averaged(totaled)
-    best_offense_id = averaged.max_by {|team| team[1]}[0]
+    best_offense_id = averaged.max_by {|team| req == "top" ? team[1] : -team[1]}.first
     best_offense_team = Team.find_id(best_offense_id).team_name
+  end
+
+
+  def self.top_offense
+    get_total_and_average("top")
+    # totaled = total_games_and_points(GameTeam.all)  
+    # averaged = averaged(totaled)
+    # best_offense_id = averaged.max_by {|team| team[1]}[0]
+    # best_offense_team = Team.find_id(best_offense_id).team_name
+  end
+
+  def self.bottom_offense 
+    get_total_and_average("bottom")
+    # totaled = total_games_and_points(GameTeam.all)
+    # averaged = averaged(totaled)
+    # worst_offense_id = averaged.max_by {|team| -team[1]}[0]
+    # worst_offense_team = Team.find_id(best_offense_id).team_name
   end
 
 end

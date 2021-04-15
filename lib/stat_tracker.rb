@@ -111,12 +111,9 @@ class StatTracker
     GameTeam.top_offense
   end
 
-#   def worst_offense(game_stats)
-#     totaled = total_games_and_points(game_stats)
-#     averaged = averaged(totaled)
-#     worst_offense_id = averaged.max_by {|team| -team[1]}[0]
-#     worst_offense_team = self.team_collection.find {|team| team.team_id == worst_offense_id}.team_name 
-#   end
+  def worst_offense
+    GameTeam.bottom_offense
+  end
 
 #   def highest_scoring_visitor(game_stats)
 #     visitor_totals = total_games_and_points(game_stats, "away")
