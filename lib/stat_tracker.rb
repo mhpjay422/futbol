@@ -36,10 +36,15 @@ class StatTracker
     # end
   end
   
-#   def percentage_home_wins(games)
-#     home_wins = games.reduce(0) {|total, game| total += 1 if game.home_goals > game.away_goals; total }
-#     home_wins / games.length.to_f * 100.round(2)
-#   end
+  def percentage_home_wins
+    
+    # binding.pry
+    
+    num_home_wins = Game.where(:winner, :home_team).count
+    percentage = (num_home_wins / Game.all.count.to_f * 100).round() / 100.to_f
+    # home_wins = games.reduce(0) {|total, game| total += 1 if game.home_goals > game.away_goals; total }
+    # home_wins / games.length.to_f * 100.round(2)
+  end
   
 #   def percentage_visitor_wins(games)
 #     visitor_wins = games.reduce(0) {|total, game| total += 1 if game.away_goals > game.home_goals; total }
