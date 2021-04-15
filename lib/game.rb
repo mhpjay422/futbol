@@ -64,5 +64,10 @@ class Game
     hash
   end
 
+  def self.avg_goals_per_season
+    total_goals = Game.all.reduce(0) {|total, game| total += (game.away_goals + game.home_goals); total}
+    (total_goals / Game.all.length.to_f).round(2)
+  end
+
 
 end 
