@@ -4,7 +4,7 @@ module DataLoader
   def load_data 
     arr = []
     CSV.foreach(data_path, headers:true, header_converters: :symbol) do |row|
-      arr << Game.new(row)
+      arr << self.new(row)
     end
     arr
   end
@@ -20,4 +20,6 @@ module DataLoader
     end
     path  
   end
+
+  
 end
