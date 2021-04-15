@@ -35,10 +35,15 @@ class StatTracker
     #   lowest
     # end
   end
+
+  def calculate_percentage(wins)
+    percentage = wins / Game.all.length.to_f
+    percentage.round(2)
+  end
   
   def percentage_home_wins
     num_home_wins = Game.where(:winner, :home_team).count
-    percentage = (num_home_wins / Game.all.length.to_f * 100).round() / 100.to_f
+    calculate_percentage(num_home_wins)
 
     # home_wins = games.reduce(0) {|total, game| total += 1 if game.home_goals > game.away_goals; total }
     # home_wins / games.length.to_f * 100.round(2)
@@ -46,7 +51,7 @@ class StatTracker
   
   def percentage_visitor_wins
     num_visitor_wins = Game.where(:winner, :away_team).count
-    percentage = (num_visitor_wins / Game.all.length.to_f * 100).round() / 100.to_f
+    calculate_percentage(num_visitor_wins)
 
     # visitor_wins = games.reduce(0) {|total, game| total += 1 if game.away_goals > game.home_goals; total }
     # visitor_wins / games.length.to_f * 100.round(2)
@@ -59,74 +64,52 @@ class StatTracker
     # 100 - (home_percentage + away_percentage).to_f.round(2)
   end
   
-#   def count_of_games_by_season
-#     hash = {}
-#     games.each {|game| hash[game.season] ? hash[game.season] += 1 : hash[game.season] = 1}
-#     hash
-#   end
+  def count_of_games_by_season
+    Game.num_games_by_season
+    
+    # hash = {}
+    # games.each {|game| hash[game.season] ? hash[game.season] += 1 : hash[game.season] = 1}
+    # hash
+  end
   
-#   def average_goals_per_game
-#     total_goals = games.reduce(0) {|total, game| total += (game.away_goals + game.home_goals); total}
-#     total_goals / games.length.to_f.round(2)
-#   end
+  def average_goals_per_game
+    Game.avg_goals_per_season
+
+    # total_goals = games.reduce(0) {|total, game| total += (game.away_goals + game.home_goals); total}
+    # total_goals / games.length.to_f.round(2)
+  end
   
-#   def average_goals_by_season
-#     hash = {}
-#     games.each do |game|
-#       season = game.season
-#       home_goals = game.home_goals
-#       away_goals = game.away_goals
+  def average_goals_by_season
+    Game.avg_goals_by_season
+    
+    # hash = {}
+    # games.each do |game|
+    #   season = game.season
+    #   home_goals = game.home_goals
+    #   away_goals = game.away_goals
 
-#       if hash[season]
-#         hash[season][0] += 1
-#         hash[season][1] += (home_goals + away_goals)
-#       else 
-#         hash[season] = [1, (home_goals + away_goals)]
-#       end
-#     end
+    #   if hash[season]
+    #     hash[season][0] += 1
+    #     hash[season][1] += (home_goals + away_goals)
+    #   else 
+    #     hash[season] = [1, (home_goals + away_goals)]
+    #   end
+    # end
 
-#     hash = hash.each {|game| hash[game[0]] = game[1][1] / game[1][0].to_f.round(2)}
-#   end
+    # hash = hash.each {|game| hash[game[0]] = game[1][1] / game[1][0].to_f.round(2)}
+  end
 
 # #
 # # LEAGUE STATISTICS
 # #
 
-#   def count_of_teams(game_stats)
-#     game_stats.map {|game| game.team_id}.uniq!.length
-#   end
+  def count_of_teams
+    GameTeam.team_count
+  end
 
-#   def total_games_and_points(game_stats, hoa=nil)
-#     totaled = game_stats.reduce({}) do |total, game|
-#       team_id  = game.team_id
-#       goals = game.goals
-
-#       if hoa == nil || game.HoA == hoa 
-#         if total[team_id] == nil
-#           total[team_id] = [1, goals]        
-#         else 
-#           games = total[team_id][0] + 1
-#           cumulative_goals = total[team_id][1] + goals
-#           total[team_id] = [games, cumulative_goals]
-#         end
-#       end  
-#       total
-#     end
-#   end
-
-#   def averaged(totaled)
-#     averaged = totaled.map do |team| 
-#       average = team[1][1] / team[1][0].to_f
-#       [team[0], average]
-#     end
-#   end
-
-#   def best_offense(game_stats)
-#     totaled = total_games_and_points(game_stats)  
-#     averaged = averaged(totaled)
-#     best_offense_id = averaged.max_by {|team| team[1]}[0]
-#     best_offense_team = self.team_collection.find {|team| team.team_id == best_offense_id}.team_name    
-#   end
+  def best_offense
+    GameTeam.top_offense
+  end
 
 #   def worst_offense(game_stats)
 #     totaled = total_games_and_points(game_stats)

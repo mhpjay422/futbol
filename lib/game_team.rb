@@ -1,6 +1,8 @@
 
 
 class GameTeam
+  extend Finder
+  extend DataLoader
 
   attr_reader :game_id, :team_id, :HoA, :result,:settled_in, :head_coach, :goals, :shots, :tackles, :pim, :powerPlayOpportunities, :powerPlayGoals, :faceOffWinPercentage, :giveaways, :takeaways
   def initialize(data)
@@ -20,12 +22,42 @@ class GameTeam
     @giveaways = data[13].to_i
     @takeaways = data[14].to_i
   end
-
-  def self.load_game_team
-    arr = []
-    CSV.foreach('./data/game_teams.csv', headers:true, header_converters: :symbol) do |row|
-      arr << GameTeam.new(row)
-    end
-    arr
+  
+  def self.team_count
+    GameTeam.all.map {|game| game.team_id}.uniq!.length
   end
+
+
+  def self.total_games_and_points(game_stats, hoa=nil)
+    totaled = game_stats.reduce({}) do |total, game|
+      team_id  = game.team_id
+      goals = game.goals
+
+      if hoa == nil || game.HoA == hoa 
+        if total[team_id] == nil
+          total[team_id] = [1, goals]        
+        else 
+          games = total[team_id][0] + 1
+          cumulative_goals = total[team_id][1] + goals
+          total[team_id] = [games, cumulative_goals]
+        end
+      end  
+      total
+    end
+  end
+
+  def self.averaged(totaled)
+    averaged = totaled.map do |team| 
+      average = team[1][1] / team[1][0].to_f
+      [team[0], average]
+    end
+  end
+
+  def self.top_offense
+    totaled = total_games_and_points(GameTeam.all)  
+    averaged = averaged(totaled)
+    best_offense_id = averaged.max_by {|team| team[1]}[0]
+    best_offense_team = Team.find_id(best_offense_id).team_name
+  end
+
 end
