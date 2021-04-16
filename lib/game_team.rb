@@ -79,4 +79,8 @@ class GameTeam
   def self.low_scoring_visitor
     get_total_and_average("away", false)
   end
+
+  def self.low_scoring_home_team 
+    get_total_and_average("home", false)
+  end
 end
