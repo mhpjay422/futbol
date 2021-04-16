@@ -53,10 +53,10 @@ class GameTeam
     end
   end
 
-  def self.get_total_and_average(req)
+  def self.get_total_and_average(req, low=true)
     totaled = GameTeam.total_games_and_points(req)
     averaged = averaged(totaled)
-    best_offense_id = averaged.max_by {|team| req != "bottom" ? team[1] : -team[1]}.first
+    best_offense_id = averaged.max_by {|team| req != "bottom" && low ? team[1] : -team[1]}.first
     best_offense_team = Team.find_id(best_offense_id).team_name
   end
 
@@ -74,5 +74,9 @@ class GameTeam
 
   def self.high_scoring_home_team 
     get_total_and_average("home") 
+  end
+
+  def self.low_scoring_visitor
+    get_total_and_average("away", false)
   end
 end
