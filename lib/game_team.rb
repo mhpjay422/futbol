@@ -28,8 +28,8 @@ class GameTeam
   end
 
 
-  def self.total_games_and_points(game_stats, hoa=nil)
-    totaled = game_stats.reduce({}) do |total, game|
+  def self.total_games_and_points(hoa=nil)
+    totaled = GameTeam.all.reduce({}) do |total, game|
       team_id  = game.team_id
       goals = game.goals
 
@@ -54,7 +54,7 @@ class GameTeam
   end
 
   def self.get_total_and_average(req)
-    totaled = total_games_and_points(GameTeam.all)  
+    totaled = GameTeam.total_games_and_points 
     averaged = averaged(totaled)
     best_offense_id = averaged.max_by {|team| req == "top" ? team[1] : -team[1]}.first
     best_offense_team = Team.find_id(best_offense_id).team_name
@@ -75,6 +75,13 @@ class GameTeam
     # averaged = averaged(totaled)
     # worst_offense_id = averaged.max_by {|team| -team[1]}[0]
     # worst_offense_team = Team.find_id(best_offense_id).team_name
+  end
+
+  def self.high_scoring_visitor 
+    visitor_totals = total_games_and_points("away")
+    averaged = averaged(visitor_totals)
+    high_score_vis_id = averaged.max_by {|team| team[1]}[0]
+    high_score_vis_team = Team.find_id(high_score_vis_id).team_name 
   end
 
 end
