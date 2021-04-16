@@ -31,13 +31,16 @@ class GameTeam
     totaled = GameTeam.all.reduce({}) do |total, game|
       team_id  = game.team_id
       goals = game.goals
+      home_or_away = game.HoA
       
-      if (req == "top" || req == "bottom") || game.HoA == req 
+      if req == :all || home_or_away == req 
         if total[team_id] == nil
+
           total[team_id] = [1, goals]        
         else 
           games = total[team_id][0] + 1
           cumulative_goals = total[team_id][1] + goals
+
           total[team_id] = [games, cumulative_goals]
         end
       end  
@@ -49,38 +52,41 @@ class GameTeam
   def self.averaged(totaled)
     averaged = totaled.map do |team| 
       average = team[1][1] / team[1][0].to_f
-      [team[0], average]
+      team_id = team[0]
+
+      [team_id, average]
     end
   end
 
-  def self.get_total_and_average(req, low=true)
+  def self.total_and_average(req, highest_or_lowest)
     totaled = GameTeam.total_games_and_points(req)
     averaged = averaged(totaled)
-    best_offense_id = averaged.max_by {|team| req != "bottom" && low ? team[1] : -team[1]}.first
-    best_offense_team = Team.find_id(best_offense_id).team_name
+    id = averaged.max_by {|team| highest_or_lowest == :highest ? team[1] : -team[1]}.first
+
+    team_name = Team.find_id(id).team_name
   end
 
   def self.top_offense
-    get_total_and_average("top")
+    total_and_average(:all, :highest)
   end
 
   def self.bottom_offense 
-    get_total_and_average("bottom")
+    total_and_average(:all, :lowest)
   end
 
   def self.high_scoring_visitor 
-    get_total_and_average("away") 
+    total_and_average("away", :highest) 
   end
 
   def self.high_scoring_home_team 
-    get_total_and_average("home") 
+    total_and_average("home", :highest) 
   end
 
   def self.low_scoring_visitor
-    get_total_and_average("away", false)
+    total_and_average("away", :lowest)
   end
 
   def self.low_scoring_home_team 
-    get_total_and_average("home", false)
+    total_and_average("home", :lowest)
   end
 end

@@ -115,33 +115,21 @@ class StatTracker
     GameTeam.bottom_offense
   end
 
-#   def highest_scoring_visitor(game_stats)
-#     visitor_totals = total_games_and_points(game_stats, "away")
-#     averaged = averaged(visitor_totals)
-#     high_score_vis_id = averaged.max_by {|team| team[1]}[0]
-#     high_score_vis_team = self.team_collection.find {|team| team.team_id == high_score_vis_id}.team_name 
-#   end
+  def highest_scoring_visitor
+    GameTeam.high_scoring_visitor
+  end
 
-#   def highest_scoring_home_team(game_stats)
-#     home_totals = total_games_and_points(game_stats, "home")
-#     averaged = averaged(home_totals)
-#     high_score_home_id = averaged.max_by {|team| team[1]}[0]
-#     high_score_home_team = self.team_collection.find {|team| team.team_id == high_score_home_id}.team_name 
-#   end
+  def highest_scoring_home_team
+    GameTeam.high_scoring_home_team
+  end
 
-#   def lowest_scoring_visitor(game_stats)
-#     visitor_totals = total_games_and_points(game_stats, "away")
-#     averaged = averaged(visitor_totals)
-#     low_score_vis_id = averaged.max_by {|team| -team[1]}[0]
-#     low_score_vis_team = self.team_collection.find {|team| team.team_id == low_score_vis_id}.team_name 
-#   end
+  def lowest_scoring_visitor
+    GameTeam.low_scoring_visitor
+  end
 
-#   def lowest_scoring_home_team(game_stats)
-#     home_totals = total_games_and_points(game_stats, "home")
-#     averaged = averaged(home_totals)
-#     low_score_home_id = averaged.max_by {|team| -team[1]}[0]
-#     low_score_home_team = self.team_collection.find {|team| team.team_id == low_score_home_id}.team_name
-#   end
+  def lowest_scoring_home_team
+    GameTeam.low_scoring_home_team
+  end
 
 # #
 # # Season Statistics
