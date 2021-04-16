@@ -27,12 +27,11 @@ class GameTeam
     GameTeam.all.map {|game| game.team_id}.uniq!.length
   end
 
-
   def self.total_games_and_points(hoa=nil)
     totaled = GameTeam.all.reduce({}) do |total, game|
       team_id  = game.team_id
       goals = game.goals
-
+      
       if hoa == nil || game.HoA == hoa 
         if total[team_id] == nil
           total[team_id] = [1, goals]        
@@ -41,6 +40,7 @@ class GameTeam
           cumulative_goals = total[team_id][1] + goals
           total[team_id] = [games, cumulative_goals]
         end
+
       end  
       total
     end
@@ -84,4 +84,10 @@ class GameTeam
     high_score_vis_team = Team.find_id(high_score_vis_id).team_name 
   end
 
+  def self.high_scoring_home_team 
+    home_totals = total_games_and_points("home")
+    averaged = averaged(home_totals)
+    high_score_home_id = averaged.max_by {|team| team[1]}[0]
+    high_score_home_team = Team.find_id(high_score_home_id).team_name 
+  end
 end
