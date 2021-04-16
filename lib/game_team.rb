@@ -27,12 +27,12 @@ class GameTeam
     GameTeam.all.map {|game| game.team_id}.uniq!.length
   end
 
-  def self.total_games_and_points(hoa=nil)
+  def self.total_games_and_points(req)
     totaled = GameTeam.all.reduce({}) do |total, game|
       team_id  = game.team_id
       goals = game.goals
       
-      if hoa == nil || game.HoA == hoa 
+      if (req == "top" || req == "bottom") || game.HoA == req 
         if total[team_id] == nil
           total[team_id] = [1, goals]        
         else 
@@ -40,8 +40,8 @@ class GameTeam
           cumulative_goals = total[team_id][1] + goals
           total[team_id] = [games, cumulative_goals]
         end
-
       end  
+
       total
     end
   end
@@ -54,40 +54,25 @@ class GameTeam
   end
 
   def self.get_total_and_average(req)
-    totaled = GameTeam.total_games_and_points 
+    totaled = GameTeam.total_games_and_points(req)
     averaged = averaged(totaled)
-    best_offense_id = averaged.max_by {|team| req == "top" ? team[1] : -team[1]}.first
+    best_offense_id = averaged.max_by {|team| req != "bottom" ? team[1] : -team[1]}.first
     best_offense_team = Team.find_id(best_offense_id).team_name
   end
 
-
   def self.top_offense
     get_total_and_average("top")
-    # totaled = total_games_and_points(GameTeam.all)  
-    # averaged = averaged(totaled)
-    # best_offense_id = averaged.max_by {|team| team[1]}[0]
-    # best_offense_team = Team.find_id(best_offense_id).team_name
   end
 
   def self.bottom_offense 
     get_total_and_average("bottom")
-    # totaled = total_games_and_points(GameTeam.all)
-    # averaged = averaged(totaled)
-    # worst_offense_id = averaged.max_by {|team| -team[1]}[0]
-    # worst_offense_team = Team.find_id(best_offense_id).team_name
   end
 
   def self.high_scoring_visitor 
-    visitor_totals = total_games_and_points("away")
-    averaged = averaged(visitor_totals)
-    high_score_vis_id = averaged.max_by {|team| team[1]}[0]
-    high_score_vis_team = Team.find_id(high_score_vis_id).team_name 
+    get_total_and_average("away") 
   end
 
   def self.high_scoring_home_team 
-    home_totals = total_games_and_points("home")
-    averaged = averaged(home_totals)
-    high_score_home_id = averaged.max_by {|team| team[1]}[0]
-    high_score_home_team = Team.find_id(high_score_home_id).team_name 
+    get_total_and_average("home") 
   end
 end
