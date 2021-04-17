@@ -145,48 +145,50 @@ class StatTracker
     GameTeam.least_wins_coach(seasons)
   end
 
-#   def culmulative_shooting_stats_by_team(find_seasons_for_team, game_stats)
-#     game_stats.reduce({}) do |total, game|
-#       team_id = game.team_id
-#       shots = game.shots
-#       goals = game.goals
+  # def culmulative_shooting_stats_by_team(find_seasons_for_team, game_stats)
+  #   game_stats.reduce({}) do |total, game|
+  #     team_id = game.team_id
+  #     shots = game.shots
+  #     goals = game.goals
 
 
-#       if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
-#         if total[team_id] != nil
-#           total_goals = total[team_id][0] + goals
-#           total_shots = total[team_id][1] + shots
-#           total[team_id] = [total_goals, total_shots]
-#         else
-#           total[team_id] = [goals, shots]
-#         end
-#       end
+  #     if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
+  #       if total[team_id] != nil
+  #         total_goals = total[team_id][0] + goals
+  #         total_shots = total[team_id][1] + shots
+  #         total[team_id] = [total_goals, total_shots]
+  #       else
+  #         total[team_id] = [goals, shots]
+  #       end
+  #     end
       
-#       total
-#     end
-#   end
+  #     total
+  #   end
+  # end
 
-#   def average_shooting_stats(total_shooting_stats)
-#     total_shooting_stats.map do |data|
-#       team = data[0]
-#       goals = data[1][0]
-#       shots = data[1][1]
-#       [team, goals/shots.to_f]
-#     end
-#   end
+  # def average_shooting_stats(total_shooting_stats)
+  #   total_shooting_stats.map do |data|
+  #     team = data[0]
+  #     goals = data[1][0]
+  #     shots = data[1][1]
+  #     [team, goals/shots.to_f]
+  #   end
+  # end
 
-#   def get_avg_shooting_stats_by_team(season_id, game_stats)
-#     load_season_games = self.game_collection
-#     find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
-#     total_shooting_stats = culmulative_shooting_stats_by_team(find_seasons_for_team, game_stats)
-#     averaged = average_shooting_stats(total_shooting_stats)
-#   end
+  # def get_avg_shooting_stats_by_team(season_id, game_stats)
+  #   load_season_games = self.game_collection
+  #   find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
+  #   total_shooting_stats = culmulative_shooting_stats_by_team(find_seasons_for_team, game_stats)
+  #   averaged = average_shooting_stats(total_shooting_stats)
+  # end
   
-#   def most_accurate_team(season_id, game_stats)
-#     averaged = get_avg_shooting_stats_by_team(season_id, game_stats)
-#     best_shooting_team_id = averaged.max_by {|team| team[1]}[0]
-#     best_shooting_team = self.team_collection.find {|team| team.team_id == best_shooting_team_id}.team_name
-#   end
+  def most_accurate_team(season_id)
+    seasons = Game.find_seasons_for_team(season_id)
+    GameTeam.best_ratio_team(seasons)
+    # averaged = get_avg_shooting_stats_by_team(season_id, game_stats)
+    # best_shooting_team_id = averaged.max_by {|team| team[1]}[0]
+    # best_shooting_team = self.team_collection.find {|team| team.team_id == best_shooting_team_id}.team_name
+  end
   
 #   def least_accurate_team(season_id, game_stats)
 #     averaged = get_avg_shooting_stats_by_team(season_id, game_stats)

@@ -36,12 +36,12 @@ class GameTeam
       if req == :all || home_or_away == req 
         if total[team_id] == nil
 
-          total[team_id] = [1, goals]        
+          total[team_id] = [goals, 1]        
         else 
-          games = total[team_id][0] + 1
-          cumulative_goals = total[team_id][1] + goals
+          cumulative_goals = total[team_id][0] + goals
+          games = total[team_id][1] + 1
 
-          total[team_id] = [games, cumulative_goals]
+          total[team_id] = [cumulative_goals, games]
         end
       end  
 
@@ -73,9 +73,18 @@ class GameTeam
   def self.averaged(totaled)
     averaged = totaled.map do |team| 
       team_id = team[0]
-      average = team[1][1] / team[1][0].to_f
+      average = team[1][0] / team[1][1].to_f
 
       [team_id, average]
+    end
+  end
+
+  def self.average_shooting_stats(total_shooting_stats)
+    total_shooting_stats.map do |data|
+      team = data[0]
+      goals = data[1][0]
+      shots = data[1][1]
+      [team, goals/shots.to_f]
     end
   end
 
@@ -153,5 +162,47 @@ class GameTeam
     total_wins_and_games = total_games_wins_by_coach(seasons) 
     win_coach = total_wins_and_games.max_by {|coach| -coach[1][0]}
     win_coach.first
+  end
+
+  def self.culmulative_shooting_stats_by_team(seasons)
+    GameTeam.all.reduce({}) do |total, game|
+      team_id = game.team_id
+      shots = game.shots
+      goals = game.goals
+
+
+      if seasons.any? {|gm| game.game_id == gm.game_id }
+        if total[team_id] != nil
+          total_goals = total[team_id][0] + goals
+          total_shots = total[team_id][1] + shots
+          total[team_id] = [total_goals, total_shots]
+        else
+          total[team_id] = [goals, shots]
+        end
+      end
+      
+      total
+    end
+  end
+
+  # def self.average_shooting_stats(total_shooting_stats)
+  #   total_shooting_stats.map do |data|
+  #     team = data[0]
+  #     goals = data[1][0]
+  #     shots = data[1][1]
+  #     [team, goals/shots.to_f]
+  #   end
+  # end
+
+  # def self.get_avg_shooting_stats_by_team(seasons)
+  #   total_shooting_stats = culmulative_shooting_stats_by_team(seasons)
+  #   averaged = average_shooting_stats(total_shooting_stats)
+  # end
+  
+  def self.best_ratio_team(seasons)
+    total_shooting_stats = culmulative_shooting_stats_by_team(seasons)
+    averaged = averaged(total_shooting_stats)
+    best_shooting_team_id = averaged.max_by {|team| team[1]}[0]
+    best_shooting_team = Team.find_id(best_shooting_team_id).team_name
   end
 end
