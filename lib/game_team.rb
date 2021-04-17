@@ -145,7 +145,13 @@ class GameTeam
 
   def self.most_wins_coach(seasons)
     total_wins_and_games = total_games_wins_by_coach(seasons) 
-    win_coach = total_wins_and_games.max_by {|coach| coach[1]}
+    win_coach = total_wins_and_games.max_by {|coach| coach[1][0]}
+    win_coach.first
+  end
+
+  def self.least_wins_coach(seasons)
+    total_wins_and_games = total_games_wins_by_coach(seasons) 
+    win_coach = total_wins_and_games.max_by {|coach| -coach[1][0]}
     win_coach.first
   end
 end

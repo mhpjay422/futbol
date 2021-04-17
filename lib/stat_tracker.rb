@@ -140,13 +140,10 @@ class StatTracker
     GameTeam.most_wins_coach(seasons)
   end
   
-#   def worst_coach(season_id, game_stats)
-#     load_season_games = self.game_collection
-#     find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
-#     total_wins_and_games = total_games_wins_by_coach(find_seasons_for_team, game_stats) 
-#     averaged = average_head_coaching_wins(total_wins_and_games)
-#     win_coach = averaged.max_by {|coach| -coach[1]}
-#   end
+  def worst_coach(season_id)
+    seasons = Game.find_seasons_for_team(season_id)
+    GameTeam.least_wins_coach(seasons)
+  end
 
 #   def culmulative_shooting_stats_by_team(find_seasons_for_team, game_stats)
 #     game_stats.reduce({}) do |total, game|
