@@ -135,41 +135,10 @@ class StatTracker
 # # Season Statistics
 # #
 
-#   def total_games_wins_by_coach(find_seasons_for_team, game_stats) 
-#     game_stats.reduce({}) do |total, game|
-#       head_coach = game.head_coach
-#       win_or_loss = game.result == 'WIN' ? 1 : 0
-
-#       if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
-#         if total[head_coach] != nil
-#           wins = total[head_coach][0] + win_or_loss
-#           games = total[head_coach][1] + 1
-#           total[head_coach] = [wins, games]
-#         else
-#           total[head_coach] = [win_or_loss, 1]
-#         end
-#       end
-      
-#       total
-#     end
-#   end
-
-#   def average_head_coaching_wins(total_wins_and_games)
-#     total_wins_and_games.map do |coach_data|
-#       coach = coach_data[0]
-#       wins = coach_data[1][0]
-#       games = coach_data[1][1]
-#       [coach, wins/games.to_f]
-#     end
-#   end
-
-#   def winningest_coach(season_id, game_stats)
-#     load_season_games = self.game_collection
-#     find_seasons_for_team = load_season_games.select{|game| game.season == season_id}
-#     total_wins_and_games = total_games_wins_by_coach(find_seasons_for_team, game_stats) 
-#     averaged = average_head_coaching_wins(total_wins_and_games)
-#     win_coach = averaged.max_by {|coach| coach[1]}
-#   end
+  def winningest_coach(season_id)
+    seasons = Game.find_seasons_for_team(season_id)
+    GameTeam.most_wins_coach(seasons)
+  end
   
 #   def worst_coach(season_id, game_stats)
 #     load_season_games = self.game_collection

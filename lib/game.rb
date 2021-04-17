@@ -89,4 +89,8 @@ class Game
     result = reduced.each {|game| reduced[game[0]] = (game[1][1] / game[1][0].to_f).round(2)}
   end
 
+  def self.find_seasons_for_team(season_id)
+    Game.all.select{|game| game.season == season_id}
+  end
+
 end 

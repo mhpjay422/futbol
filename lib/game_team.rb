@@ -49,10 +49,31 @@ class GameTeam
     end
   end
 
+  def self.total_games_wins_by_coach(find_seasons_for_team) 
+    GameTeam.all.reduce({}) do |total, game|
+      head_coach = game.head_coach
+      win_or_loss = game.result == 'WIN' ? 1 : 0
+
+      if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
+        if total[head_coach] != nil
+          wins = total[head_coach][0] + win_or_loss
+          games = total[head_coach][1] + 1
+
+          total[head_coach] = [wins, games]
+        else
+
+          total[head_coach] = [win_or_loss, 1]
+        end
+      end
+      
+      total
+    end
+  end
+
   def self.averaged(totaled)
     averaged = totaled.map do |team| 
-      average = team[1][1] / team[1][0].to_f
       team_id = team[0]
+      average = team[1][1] / team[1][0].to_f
 
       [team_id, average]
     end
@@ -88,5 +109,43 @@ class GameTeam
 
   def self.low_scoring_home_team 
     total_and_average("home", :lowest)
+  end
+
+  def self.total_games_wins_by_coach(find_seasons_for_team) 
+    GameTeam.all.reduce({}) do |total, game|
+      head_coach = game.head_coach
+      win_or_loss = game.result == 'WIN' ? 1 : 0
+
+      if find_seasons_for_team.any? {|gm| game.game_id == gm.game_id }
+        if total[head_coach] != nil
+          wins = total[head_coach][0] + win_or_loss
+          games = total[head_coach][1] + 1
+
+          total[head_coach] = [wins, games]
+        else
+
+          total[head_coach] = [win_or_loss, 1]
+        end
+      end
+      
+      total
+    end
+  end
+
+  # def self.average_head_coaching_wins(total_wins_and_games)
+  #   total_wins_and_games.map do |coach_data|
+      
+      
+  #     coach = coach_data[0]
+  #     wins = coach_data[1][0]
+  #     games = coach_data[1][1]
+  #     [coach, wins/games.to_f]
+  #   end
+  # end
+
+  def self.most_wins_coach(seasons)
+    total_wins_and_games = total_games_wins_by_coach(seasons) 
+    win_coach = total_wins_and_games.max_by {|coach| coach[1]}
+    win_coach.first
   end
 end
